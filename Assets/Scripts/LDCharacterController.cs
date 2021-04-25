@@ -12,6 +12,7 @@ public class LDCharacterController : MonoBehaviour
     public float isGroundedTimer = 0.0f;
     public float jumpLeeway = 0.2f;
     public float checkRadius = .021f;
+    public Transform spawnPoint;
 
     Vector3 move;
 
@@ -157,5 +158,26 @@ public class LDCharacterController : MonoBehaviour
         //characterController.Move(move.With(x: 0));
         anim.SetFloat("Speed", Mathf.Abs(move.x));
         //transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    public void Respawn()
+    {
+        characterController.enabled = false;
+        transform.position = spawnPoint.position;
+        characterController.enabled = true;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Death"))
+        {
+            StartCoroutine(TriggerRespawn(.3f));
+        }
+    }
+
+    private IEnumerator TriggerRespawn(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Respawn();
     }
 }
