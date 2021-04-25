@@ -8,6 +8,7 @@ public class LDCharacterStats : MonoBehaviour
     public float gravityFactor = -30f;
 
     public float jumpPower = 12f;
+    public float terminalVerticalVelocity = -12f;
 
 
 }

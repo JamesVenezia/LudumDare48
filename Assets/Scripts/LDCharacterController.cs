@@ -80,6 +80,8 @@ public class LDCharacterController : MonoBehaviour
             else // in air
             {
                 move.y += stats.gravityFactor * Time.deltaTime;
+                if (move.y < stats.terminalVerticalVelocity)
+                    move.y = stats.terminalVerticalVelocity;
             }
 
             bool blocked = false;
@@ -174,6 +176,7 @@ public class LDCharacterController : MonoBehaviour
             StartCoroutine(TriggerRespawn(.3f));
         }
     }
+
 
     private IEnumerator TriggerRespawn(float seconds)
     {

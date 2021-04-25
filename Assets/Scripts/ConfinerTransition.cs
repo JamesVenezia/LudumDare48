@@ -20,4 +20,12 @@ public class ConfinerTransition : MonoBehaviour
             controller.spawnPoint = spawnPoint;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
