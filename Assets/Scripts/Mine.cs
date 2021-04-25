@@ -18,6 +18,7 @@ public class Mine : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             controller.mineJump = true;
+            AudioManager.instance.Play("Mine");
             gameObject.SetActive(false);
         }
     }

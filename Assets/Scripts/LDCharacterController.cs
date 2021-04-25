@@ -123,6 +123,10 @@ public class LDCharacterController : MonoBehaviour
                 shouldJump = false;
                 if (mineJump)
                     mineJumpActive = true;
+                else
+                {
+                    AudioManager.instance.Play("Jump");
+                }
                 mineJump = false;
                 isGrounded = false;
             }
