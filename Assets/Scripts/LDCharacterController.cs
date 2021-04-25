@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class LDCharacterController : MonoBehaviour
 {
-    public GameObject characterGameObject;
+    public CinemachineVirtualCamera activeCamera;
     public LayerMask groundMask;
     public bool isGrounded = false;
     public float isGroundedTimer = 0.0f;
@@ -13,7 +14,6 @@ public class LDCharacterController : MonoBehaviour
     public float checkRadius = .021f;
 
     Vector3 move;
-    Vector3 velocity;
 
     public bool shouldJump = false;
 
