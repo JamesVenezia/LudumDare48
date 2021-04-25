@@ -7,6 +7,12 @@ public class Mine : MonoBehaviour
     public LDCharacterController controller;
 
 
+    private void Start()
+    {
+        if (controller == null)
+            controller = GetCommonEntities.instance.controller;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
