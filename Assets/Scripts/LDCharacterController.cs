@@ -13,10 +13,13 @@ public class LDCharacterController : MonoBehaviour
     public float jumpLeeway = 0.2f;
     public float checkRadius = .021f;
     public Transform spawnPoint;
+    public GameObject parentWithRespawnables;
 
     Vector3 move;
 
     public bool shouldJump = false;
+    public bool mineJump = false;
+    bool mineJumpActive = false;
 
     private CharacterController characterController;
     public bool respawning;
@@ -31,6 +34,7 @@ public class LDCharacterController : MonoBehaviour
 
     public List<Transform> groundChecks;
     public List<Transform> wallChecks;
+    public List<Transform> ceilingChecks;
 
 
     private void Awake()
@@ -48,6 +52,7 @@ public class LDCharacterController : MonoBehaviour
         input.OnLeftPressed += HandleLeftPressed;
         input.OnRightPressed += HandleRightPressed;
         input.OnHorizontalReleased += HandleHorizontalReleased;
+        input.OnRetryPressed += HandleRetryPressed;
     }
 
 
@@ -82,6 +87,18 @@ public class LDCharacterController : MonoBehaviour
                 move.y += stats.gravityFactor * Time.deltaTime;
                 if (move.y < stats.terminalVerticalVelocity)
                     move.y = stats.terminalVerticalVelocity;
+
+                if(move.y > 0) //ceilingChecks
+                {
+                    foreach (var check in ceilingChecks)
+                    {
+                        if (Physics.CheckSphere(check.transform.position, checkRadius, groundMask, QueryTriggerInteraction.Ignore))
+                        {
+                            move.y = 0;
+                            break;
+                        }
+                    }
+                }
             }
 
             bool blocked = false;
@@ -100,10 +117,13 @@ public class LDCharacterController : MonoBehaviour
                 characterController.Move(move.With(y: 0) * Time.deltaTime);
             }
 
-            if(shouldJump)
+            if(shouldJump || mineJump)
             {
-                move.y += Mathf.Sqrt(stats.jumpPower * -2 * stats.gravityFactor);
+                move.y += Mathf.Sqrt(stats.jumpPower * -2 * stats.gravityFactor * ((mineJump) ? 2 : 1));
                 shouldJump = false;
+                if (mineJump)
+                    mineJumpActive = true;
+                mineJump = false;
                 isGrounded = false;
             }
             else if(isGrounded)
@@ -111,6 +131,9 @@ public class LDCharacterController : MonoBehaviour
                 move.y = 0;
             }
             characterController.Move(move.With(x: 0) * Time.deltaTime);
+
+            if (mineJumpActive && move.y < 0)
+                mineJumpActive = false;
 
 
             anim.SetFloat("Speed", Mathf.Abs(move.x));
@@ -138,7 +161,7 @@ public class LDCharacterController : MonoBehaviour
 
     public void JumpCancelled()
     {
-        if (move.y > 0)
+        if (move.y > 0 && !mineJumpActive)
             move.y = 0;
     }
 
@@ -162,11 +185,22 @@ public class LDCharacterController : MonoBehaviour
         //transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
+    void HandleRetryPressed()
+    {
+        Respawn();
+    }
+
     public void Respawn()
     {
         characterController.enabled = false;
         transform.position = spawnPoint.position;
         characterController.enabled = true;
+
+        foreach(var r in parentWithRespawnables.GetComponentsInChildren<ReactivateChildren>())
+        {
+            r.Reactivate();
+        }
+
     }
 
     public void OnTriggerEnter(Collider other)

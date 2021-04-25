@@ -10,6 +10,7 @@ public class LDCharacterInput : MonoBehaviour
     public event Action OnRightPressed = delegate { };
     public event Action OnHorizontalReleased = delegate { };
     public event Action OnLeftPressed = delegate { };
+    public event Action OnRetryPressed = delegate { };
 
 
     LDCharacterController controller;
@@ -45,6 +46,11 @@ public class LDCharacterInput : MonoBehaviour
         else
         {
             OnHorizontalReleased();
+        }
+
+        if(Input.GetButtonDown("Retry"))
+        {
+            OnRetryPressed();
         }
 
     }

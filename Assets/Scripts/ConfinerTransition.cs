@@ -9,6 +9,7 @@ public class ConfinerTransition : MonoBehaviour
     public CinemachineVirtualCamera cam;
     public LDCharacterController controller;
     public Transform spawnPoint;
+    public GameObject parentWithRespawnables;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,6 +19,7 @@ public class ConfinerTransition : MonoBehaviour
             controller.activeCamera = cam;
             cam.gameObject.SetActive(true);
             controller.spawnPoint = spawnPoint;
+            controller.parentWithRespawnables = parentWithRespawnables;
         }
     }
 
