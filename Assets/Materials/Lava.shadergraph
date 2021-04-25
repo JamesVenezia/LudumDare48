@@ -79,7 +79,7 @@
             "m_Id": "db7a6f3f70dd42d3b83db7b2913c0a78"
         },
         {
-            "m_Id": "983cacbe87db4a19a05b654940dce855"
+            "m_Id": "195165c420554c13b110d8dc4c19e1f7"
         }
     ],
     "m_GroupDatas": [],
@@ -326,8 +326,8 @@
     ],
     "m_VertexContext": {
         "m_Position": {
-            "x": 2861.0,
-            "y": 732.0
+            "x": 2024.0,
+            "y": 997.0
         },
         "m_Blocks": [
             {
@@ -343,7 +343,7 @@
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 2903.0,
+            "x": 2024.0,
             "y": 1221.0
         },
         "m_Blocks": [
@@ -369,7 +369,7 @@
                 "m_Id": "01b99c1009b6470ca0101936a996d42c"
             },
             {
-                "m_Id": "983cacbe87db4a19a05b654940dce855"
+                "m_Id": "195165c420554c13b110d8dc4c19e1f7"
             }
         ]
     },
@@ -522,6 +522,39 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
+    "m_ObjectId": "195165c420554c13b110d8dc4c19e1f7",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "SurfaceDescription.Metallic",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "c5ada59a9a7a423d8ac2069140761580"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedDescriptor": "SurfaceDescription.Metallic"
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "1aa78d4b2a3e4d94a3782806582a091b",
     "m_Id": 2,
@@ -590,7 +623,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Tint",
     "m_StageCapability": 3,
-    "m_Value": 0.6000000238418579,
+    "m_Value": 0.30000001192092898,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -1561,39 +1594,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "983cacbe87db4a19a05b654940dce855",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "SurfaceDescription.Metallic",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 0.0,
-            "height": 0.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "c0a32f99bb1d4cd599ded13c0f8a15ad"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedDescriptor": "SurfaceDescription.Metallic"
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.UVMaterialSlot",
     "m_ObjectId": "9ab2f69c46214747a41389923a58aea1",
     "m_Id": 0,
@@ -1710,7 +1710,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Scale",
     "m_StageCapability": 3,
-    "m_Value": 3.0,
+    "m_Value": 1.9600000381469727,
     "m_DefaultValue": 10.0,
     "m_Labels": []
 }
@@ -1885,21 +1885,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "c0a32f99bb1d4cd599ded13c0f8a15ad",
-    "m_Id": 0,
-    "m_DisplayName": "Metallic",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Metallic",
-    "m_StageCapability": 2,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "c29e8b4094294f629e3af2bb46c3de9a",
     "m_Id": 3,
@@ -1994,6 +1979,21 @@
         "m_SerializableColors": []
     },
     "m_SerializedDescriptor": "VertexDescription.Normal"
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "c5ada59a9a7a423d8ac2069140761580",
+    "m_Id": 0,
+    "m_DisplayName": "Metallic",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Metallic",
+    "m_StageCapability": 2,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
