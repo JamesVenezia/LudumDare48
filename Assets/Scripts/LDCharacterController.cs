@@ -117,18 +117,21 @@ public class LDCharacterController : MonoBehaviour
                 characterController.Move(move.With(y: 0) * Time.deltaTime);
             }
 
-            if(shouldJump || mineJump)
+            if(shouldJump)
             {
-                move.y += Mathf.Sqrt(stats.jumpPower * -2 * stats.gravityFactor * ((mineJump) ? 2 : 1));
+                move.y += Mathf.Sqrt(stats.jumpPower * -2 * stats.gravityFactor);
                 shouldJump = false;
-                if (mineJump)
-                    mineJumpActive = true;
-                else
-                {
-                    AudioManager.instance.Play("Jump");
-                }
+                AudioManager.instance.Play("Jump");
+                isGrounded = false;
+            }
+            else if(mineJump)
+            {
+                mineJumpActive = true;
                 mineJump = false;
                 isGrounded = false;
+            
+                move.y = Mathf.Sqrt(stats.jumpPower * -4 * stats.gravityFactor);
+
             }
             else if(isGrounded)
             {
@@ -212,6 +215,10 @@ public class LDCharacterController : MonoBehaviour
         if(other.gameObject.CompareTag("Death"))
         {
             StartCoroutine(TriggerRespawn(.3f));
+        }
+        else if (other.gameObject.CompareTag("InstantDeath"))
+        {
+            StartCoroutine(TriggerRespawn(0f));
         }
     }
 
