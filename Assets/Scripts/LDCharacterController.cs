@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class LDCharacterController : MonoBehaviour
 {
@@ -215,10 +216,19 @@ public class LDCharacterController : MonoBehaviour
         if(other.gameObject.CompareTag("Death"))
         {
             StartCoroutine(TriggerRespawn(.3f));
+            AudioManager.instance.Play("Death");
         }
         else if (other.gameObject.CompareTag("InstantDeath"))
         {
             StartCoroutine(TriggerRespawn(0f));
+            AudioManager.instance.Play("Death");
+        }
+        else if (other.gameObject.CompareTag("Restart"))
+        {
+            AudioManager.instance.Play("Death");
+            StartCoroutine(TriggerRestart(2f));
+
+
         }
     }
 
@@ -227,5 +237,10 @@ public class LDCharacterController : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         Respawn();
+    }
+    private IEnumerator TriggerRestart(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(0);
     }
 }
