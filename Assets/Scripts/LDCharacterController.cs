@@ -2,20 +2,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class LDCharacterController : MonoBehaviour
 {
-    public GameObject characterGameObject;
+    public CinemachineVirtualCamera activeCamera;
     public LayerMask groundMask;
     public bool isGrounded = false;
     public float isGroundedTimer = 0.0f;
     public float jumpLeeway = 0.2f;
     public float checkRadius = .021f;
+    public Transform spawnPoint;
+    public GameObject parentWithRespawnables;
 
     Vector3 move;
-    Vector3 velocity;
 
     public bool shouldJump = false;
+    public bool mineJump = false;
+    bool mineJumpActive = false;
 
     private CharacterController characterController;
     public bool respawning;
@@ -30,6 +35,7 @@ public class LDCharacterController : MonoBehaviour
 
     public List<Transform> groundChecks;
     public List<Transform> wallChecks;
+    public List<Transform> ceilingChecks;
 
 
     private void Awake()
@@ -47,6 +53,7 @@ public class LDCharacterController : MonoBehaviour
         input.OnLeftPressed += HandleLeftPressed;
         input.OnRightPressed += HandleRightPressed;
         input.OnHorizontalReleased += HandleHorizontalReleased;
+        input.OnRetryPressed += HandleRetryPressed;
     }
 
 
@@ -79,6 +86,20 @@ public class LDCharacterController : MonoBehaviour
             else // in air
             {
                 move.y += stats.gravityFactor * Time.deltaTime;
+                if (move.y < stats.terminalVerticalVelocity)
+                    move.y = stats.terminalVerticalVelocity;
+
+                if(move.y > 0) //ceilingChecks
+                {
+                    foreach (var check in ceilingChecks)
+                    {
+                        if (Physics.CheckSphere(check.transform.position, checkRadius, groundMask, QueryTriggerInteraction.Ignore))
+                        {
+                            move.y = 0;
+                            break;
+                        }
+                    }
+                }
             }
 
             bool blocked = false;
@@ -101,13 +122,26 @@ public class LDCharacterController : MonoBehaviour
             {
                 move.y += Mathf.Sqrt(stats.jumpPower * -2 * stats.gravityFactor);
                 shouldJump = false;
+                AudioManager.instance.Play("Jump");
                 isGrounded = false;
+            }
+            else if(mineJump)
+            {
+                mineJumpActive = true;
+                mineJump = false;
+                isGrounded = false;
+            
+                move.y = Mathf.Sqrt(stats.jumpPower * -4 * stats.gravityFactor);
+
             }
             else if(isGrounded)
             {
                 move.y = 0;
             }
             characterController.Move(move.With(x: 0) * Time.deltaTime);
+
+            if (mineJumpActive && move.y < 0)
+                mineJumpActive = false;
 
 
             anim.SetFloat("Speed", Mathf.Abs(move.x));
@@ -135,7 +169,7 @@ public class LDCharacterController : MonoBehaviour
 
     public void JumpCancelled()
     {
-        if (move.y > 0)
+        if (move.y > 0 && !mineJumpActive)
             move.y = 0;
     }
 
@@ -157,5 +191,56 @@ public class LDCharacterController : MonoBehaviour
         //characterController.Move(move.With(x: 0));
         anim.SetFloat("Speed", Mathf.Abs(move.x));
         //transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    void HandleRetryPressed()
+    {
+        Respawn();
+    }
+
+    public void Respawn()
+    {
+        characterController.enabled = false;
+        transform.position = spawnPoint.position;
+        characterController.enabled = true;
+
+        foreach(var r in parentWithRespawnables.GetComponentsInChildren<ReactivateChildren>())
+        {
+            r.Reactivate();
+        }
+
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Death"))
+        {
+            StartCoroutine(TriggerRespawn(.3f));
+            AudioManager.instance.Play("Death");
+        }
+        else if (other.gameObject.CompareTag("InstantDeath"))
+        {
+            StartCoroutine(TriggerRespawn(0f));
+            AudioManager.instance.Play("Death");
+        }
+        else if (other.gameObject.CompareTag("Restart"))
+        {
+            AudioManager.instance.Play("Death");
+            StartCoroutine(TriggerRestart(2f));
+
+
+        }
+    }
+
+
+    private IEnumerator TriggerRespawn(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Respawn();
+    }
+    private IEnumerator TriggerRestart(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(0);
     }
 }
